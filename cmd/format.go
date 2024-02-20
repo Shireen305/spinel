@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"math/rand"
 	_ "net/http/pprof"
 	"os"
@@ -43,6 +43,7 @@ func createStorage(fmt *meta.Format) (object.ObjectStorage, error) {
 	/*
 		Create storage layer
 	*/
+	// Abstraction to manage object storage without reinventing the wheel
 	blob, err := object.CreateStorage(strings.ToLower(fmt.Storage), fmt.Bucket, fmt.AccessKey, fmt.SecretKey)
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func doTesting(store object.ObjectStorage, key string, data []byte) error {
 	if err != nil {
 		return fmt.Errorf("Failed to get: %s", err)
 	}
-	data2, err := ioutil.ReadAll(p)
+	data2, err := io.ReadAll(p)
 	p.Close()
 	if !bytes.Equal(data, data2) {
 		return fmt.Errorf("Read wrong data")

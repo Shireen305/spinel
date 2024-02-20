@@ -15,13 +15,13 @@ import (
 
 	"github.com/VividCortex/godaemon"
 	"github.com/google/gops/agent"
+	"github.com/sirupsen/logrus"
 	"github.com/souvikdeyrit/spinel/pkg/chunk"
 	"github.com/souvikdeyrit/spinel/pkg/fuse"
 	"github.com/souvikdeyrit/spinel/pkg/meta"
 	"github.com/souvikdeyrit/spinel/pkg/redis"
 	"github.com/souvikdeyrit/spinel/pkg/utils"
 	"github.com/souvikdeyrit/spinel/pkg/vfs"
-	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
 
@@ -158,6 +158,7 @@ func mount(c *cli.Context) error {
 	vfs.Init(conf, m, store)
 
 	installHandler(mp)
+	// Attach FUSE to VFS, this is what initializes our Spinel engine core with FUSE
 	err = fuse.Main(conf, c.String("o"), c.Float64("attrcacheto"), c.Float64("entrycacheto"), c.Float64("direntrycacheto"))
 	if err != nil {
 		logger.Errorf("%s", err)
