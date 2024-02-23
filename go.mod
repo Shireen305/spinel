@@ -23,6 +23,7 @@ require (
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/gops v0.3.28 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/hanwen/go-fuse/v2 v2.0.4-0.20210104155004-09a3c381714c // indirect
 	github.com/hashicorp/go-uuid v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.0 // indirect
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v0.0.0-20190127152727-3a9e1f8023d5 // indirect
