@@ -53,28 +53,34 @@ func (l *logHandle) Log(args ...interface{}) {
 
 }
 
-// TODO: create a new logger instance and return the logHandle struct
 func NewLogger(name string) *logHandle {
-	logs := logrus.New()
-	loggerInstance := &logHandle{Logger: *logs, name: name}
-	return loggerInstance
-
-}
-
-// TODO: fetch a specific logger and return its logHandle struct
-func GetLogger(name string) *logHandle {
-
-	if log, ok := loggers[name]; ok {
-		return log
+	l := &logHandle{name: name}
+	l.Out = os.Stderr
+	l.Formatter = l
+	l.Level = logrus.InfoLevel
+	l.Hooks = make(logrus.LevelHooks)
+	if syslogHook != nil {
+		l.Hooks.Add(syslogHook)
 	}
-	return NewLogger(name)
+	return l
 
 }
 
-// TODO: Set loglevel for every logger in loggers map
+func GetLogger(name string) *logHandle {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if logger, ok := loggers[name]; ok {
+		return logger
+	}
+	logger := NewLogger(name)
+	loggers[name] = logger
+	return logger
+}
+
 func SetLogLevel(lvl logrus.Level) {
 	for _, log := range loggers {
-		log.lvl = &lvl
+		log.Level = lvl
 	}
 
 }
