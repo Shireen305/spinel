@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	ChunkSize   = 1 << 26 // 64M
 	DeleteChunk = 1000
 )
 

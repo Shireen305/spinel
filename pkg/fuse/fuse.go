@@ -30,8 +30,9 @@ func NewJFS() *JFS {
 	}
 }
 
-// TODO: Implement the Meta interface
- 
+/* TODO: Implement the RawFileSystem interface (https://pkg.go.dev/github.com/hanwen/go-fuse/v2@v2.0.3/fuse#RawFileSystem) 
+except String, SetDebug, Forget, Lseek, CopyFileRange, FsyncDir and Init (They have default implementations in place) */
+
 func Main(conf *vfs.Config, options string, attrcacheto_, entrycacheto_, direntrycacheto_ float64) error {
 	syscall.Setpriority(syscall.PRIO_PROCESS, os.Getpid(), -19)
 
