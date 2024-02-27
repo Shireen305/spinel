@@ -9,6 +9,16 @@ const (
 	DeleteChunk = 1000
 )
 
+const (
+	TypeFile      = 1
+	TypeDirectory = 2
+	TypeSymlink   = 3
+	TypeFIFO      = 4
+	TypeBlockDev  = 5
+	TypeCharDev   = 6
+	TypeSocket    = 7
+)
+
 type MsgCallback func(...interface{}) error
 
 type Attr struct {
@@ -40,6 +50,31 @@ type Slice struct {
 	Size    uint32
 	Off     uint32
 	Len     uint32
+}
+
+func typeToStatType(_type uint8) uint32 {
+	switch _type & 0x7F {
+	case TypeDirectory:
+		return syscall.S_IFDIR
+	case TypeSymlink:
+		return syscall.S_IFLNK
+	case TypeFile:
+		return syscall.S_IFREG
+	case TypeFIFO:
+		return syscall.S_IFIFO
+	case TypeSocket:
+		return syscall.S_IFSOCK
+	case TypeBlockDev:
+		return syscall.S_IFBLK
+	case TypeCharDev:
+		return syscall.S_IFCHR
+	default:
+		panic(_type)
+	}
+}
+
+func (a Attr) SMode() uint32 {
+	return typeToStatType(a.Typ) | uint32(a.Mode)
 }
 
 type Meta interface {
